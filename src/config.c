@@ -45,17 +45,11 @@ gboolean parse_config (GromitData *data)
 {
   gboolean status = FALSE;
   GromitPaintContext *context=NULL;
-  GromitPaintContext *context_template=NULL;
   GScanner *scanner;
   GTokenType token;
   gchar *filename;
   int file;
-
-  gchar *name, *copy;
-
-  GromitPaintType type;
-  GdkRGBA *fg_color=NULL;
-  guint width, arrowsize, minwidth, maxwidth;
+  gchar *name;
 
   /* try user config location */
   filename = g_strjoin (G_DIR_SEPARATOR_S,
@@ -102,7 +96,6 @@ gboolean parse_config (GromitData *data)
     {
       if (token == G_TOKEN_STRING)
         {
-          // --------------------------------------------------
           /*
            * New tool definition
            */
@@ -278,7 +271,7 @@ int parse_args (int argc, char **argv, GromitData *data)
                wrong_arg = TRUE;
              }
          }
-      else if (strcmp (arg, "-o") == 0 ||
+       else if (strcmp (arg, "-o") == 0 ||
                 strcmp (arg, "--opacity") == 0)
          {
            if (i+1 < argc && strtod (argv[i+1], NULL) >= 0.0 && strtod (argv[i+1], NULL) <= 1.0)
@@ -351,7 +344,6 @@ void read_keyfile(GromitData *data)
 {
     gchar *filename = g_strjoin (G_DIR_SEPARATOR_S,
 				 g_get_user_config_dir(), "gromit-mpx.ini", NULL);
-
     /*
       set defaults
     */
@@ -377,7 +369,7 @@ void read_keyfile(GromitData *data)
     if(data->opacity == 0)
 	data->opacity = DEFAULT_OPACITY;
 
- cleanup:
+  cleanup:
     g_free(filename);
     g_key_file_free(key_file);
 }
