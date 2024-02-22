@@ -67,6 +67,8 @@
 typedef enum
 {
   GROMIT_PEN,
+  GROMIT_LINE,
+  GROMIT_RECT,
   GROMIT_ERASER,
   GROMIT_RECOLOR
 } GromitPaintType;
@@ -97,7 +99,6 @@ typedef struct
   gboolean     was_grabbed;
   GdkDevice*   lastslave;
 } GromitDeviceData;
-
 
 typedef struct
 {
@@ -146,6 +147,8 @@ typedef struct
 
   cairo_surface_t *undobuffer[GROMIT_MAX_UNDO];
   gint            undo_head, undo_depth, redo_depth;
+
+  cairo_surface_t *temp_buffer;
 
   gboolean show_intro_on_startup;
 
