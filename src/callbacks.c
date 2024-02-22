@@ -24,6 +24,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include "cairo.h"
 #include "main.h"
 #include "input.h"
 #include "callbacks.h"
@@ -157,7 +158,6 @@ void on_monitors_changed ( GdkScreen *screen,
 }
 
 
-
 void on_composited_changed ( GdkScreen *screen,
 			   gpointer   user_data)
 {
@@ -190,7 +190,6 @@ void on_composited_changed ( GdkScreen *screen,
   GdkRectangle rect = {0, 0, data->width, data->height};
   gdk_window_invalidate_rect(gtk_widget_get_window(data->win), &rect, 0); 
 }
-
 
 
 void on_clientapp_selection_get (GtkWidget          *widget,
@@ -399,9 +398,8 @@ gboolean on_buttonrelease (GtkWidget *win,
 
   gfloat direction = 0;
   gint width = 0;
-  if(devdata->cur_context)
+  if (devdata->cur_context)
     width = devdata->cur_context->arrowsize * devdata->cur_context->width / 2;
-   
 
   if ((ev->x != devdata->lastx) ||
       (ev->y != devdata->lasty))
@@ -466,7 +464,6 @@ void on_mainapp_selection_get (GtkWidget          *widget,
   else
     uri = "NOK";
 
-   
   gtk_selection_data_set (selection_data,
                           gtk_selection_data_get_target(selection_data),
                           8, (guchar*)uri, strlen (uri));
@@ -549,7 +546,9 @@ void on_mainapp_selection_received (GtkWidget *widget,
 	      g_printerr ("Unable to parse color. "
 	      "Keeping default.\n");
 	    }
-	  GromitPaintContext* line_ctx = paint_context_new(data, GROMIT_PEN, fg_color, thickness, 0, thickness, thickness);
+	  GromitPaintContext* line_ctx =
+            paint_context_new(data, GROMIT_PEN, fg_color,
+                              thickness, 0, thickness, thickness);
 
 	  GdkRectangle rect;
 	  rect.x = MIN (startX,endX) - thickness / 2;
@@ -624,6 +623,7 @@ void on_mainapp_selection_received (GtkWidget *widget,
                                        style.width, style.arrowsize,
                                        style.minwidth, style.maxwidth);
 
+                  cairo_destroy(context->paint_ctx);
                   g_free(context->paint_color);
                   *context = *new_context;
                   g_free(new_context);
@@ -670,7 +670,6 @@ void on_device_added (GdkDeviceManager *device_manager,
 
   setup_input_devices(data);
 }
-
 
 
 gboolean on_toggle_paint(GtkWidget *widget,
